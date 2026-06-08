@@ -35,7 +35,7 @@ extern "C" {
 extern TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN Private defines */
-
+#define PWM_PERIOD 300//背光值
 /* USER CODE END Private defines */
 
 void MX_TIM3_Init(void);

@@ -63,6 +63,10 @@ extern UART_HandleTypeDef huart1;
 extern TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN EV */
+uint8_t HardInt_receive_str[25];
+uint8_t HardInt_uart_flag=0;
+uint8_t HardInt_mpu_flag=0;
+uint8_t HardInt_Charg_flag=0;
 
 /* USER CODE END EV */
 
