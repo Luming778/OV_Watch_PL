@@ -2,7 +2,7 @@
 #include "adc.h"
 #include "delay.h"
 
-#define INTERNAL_RES 0.128
+#define INTERNAL_RES 0.128f
 #define CHARGING_CUR 1
 
 void Power_Pins_Init()
@@ -56,7 +56,7 @@ float BatCheck()
 	HAL_ADC_PollForConversion(&hadc1,5);
 	dat = HAL_ADC_GetValue(&hadc1);
 	HAL_ADC_Stop(&hadc1);
-	BatVoltage = dat *2 *3.3 /4096;
+	BatVoltage = dat *2 *3.3f /4096;
 	return BatVoltage;
 }
 
@@ -74,7 +74,7 @@ float BatCheck_8times()
 		delay_ms(1);
 	}
 	dat = dat>>3;
-	BatVoltage = dat *2 *3.3 /4096;
+	BatVoltage = dat *2 *3.3f /4096;
 	return BatVoltage;
 }
 
@@ -87,27 +87,27 @@ uint8_t PowerCalculate()
 	if(ChargeCheck())
 	{voltage -= INTERNAL_RES * CHARGING_CUR;}
 
-	if((voltage >= 4.2))
+	if((voltage >= 4.2f))
 	{power = 100;}
-	else if(voltage >= 4.06 && voltage <4.2)
+	else if(voltage >= 4.06f && voltage < 4.2f)
 	{power = 90;}
-	else if(voltage >= 3.98 && voltage <4.06)
+	else if(voltage >= 3.98f && voltage < 4.06f)
 	{power = 80;}
-	else if(voltage >= 3.92 && voltage <3.98)
+	else if(voltage >= 3.92f && voltage < 3.98f)
 	{power = 70;}
-	else if(voltage >= 3.87 && voltage <3.92)
+	else if(voltage >= 3.87f && voltage < 3.92f)
 	{power = 60;}
-	else if(voltage >= 3.82 && voltage <3.87)
+	else if(voltage >= 3.82f && voltage < 3.87f)
 	{power = 50;}
-	else if(voltage >= 3.79 && voltage <3.82)
+	else if(voltage >= 3.79f && voltage < 3.82f)
 	{power = 40;}
-	else if(voltage >= 3.77 && voltage <3.79)
+	else if(voltage >= 3.77f && voltage < 3.79f)
 	{power = 30;}
-	else if(voltage >= 3.74 && voltage <3.77)
+	else if(voltage >= 3.74f && voltage < 3.77f)
 	{power = 20;}
-	else if(voltage >= 3.68 && voltage <3.74)
+	else if(voltage >= 3.68f && voltage < 3.74f)
 	{power = 10;}
-	else if(voltage >= 3.45 && voltage <3.68)
+	else if(voltage >= 3.45f && voltage < 3.68f)
 	{power = 5;}
 	return power;
 }

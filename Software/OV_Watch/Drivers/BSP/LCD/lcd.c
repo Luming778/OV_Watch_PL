@@ -38,7 +38,7 @@ void LCD_Fill(u16 xsta,u16 ysta,u16 xend,u16 yend,u16 color)
 ******************************************************************************/
 void LCD_Color_Fill(u16 xsta,u16 ysta,u16 xend,u16 yend,u16 *color_p)
 {
-	u16 i,j,width,height;
+	u16 width,height;
 	width = xend-xsta+1;
 	height = yend-ysta+1;
 	uint32_t pixel_count = width * height;

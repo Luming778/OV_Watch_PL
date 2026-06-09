@@ -5,7 +5,7 @@
 #include "stdio.h"
 #include "lcd.h"
 //gui
-
+#include "ui.h"
 //tasks
 #include "user_HardwareInitTask.h"
 
@@ -27,12 +27,17 @@ osTimerId_t IdleTimerHandle;
 osThreadId_t HardwareInitTaskHandle;
 const osThreadAttr_t HardwareInitTask_attributes = {
   .name = "HardwareInitTask",
-  .stack_size = 128 * 10,
-  .priority = (osPriority_t) osPriorityHigh3,
+  .stack_size = 128 * 40,
+  .priority = (osPriority_t) osPriorityNormal+1,
 };
 
 //LVGL Handler task
-
+osThreadId_t LvHandlerTaskHandle;
+const osThreadAttr_t LvHandlerTask_attributes = {
+  .name = "LvHandlerTask",
+  .stack_size = 128 * 30,
+  .priority = (osPriority_t) osPriorityNormal,
+};
 //WDOG Feed task
 
 //Idle Enter Task
@@ -76,7 +81,7 @@ const osThreadAttr_t ScrRenewTask_attributes = {
 
 
 /* Private function prototypes -----------------------------------------------*/
-
+static void LvHandlerTask(void *argument);
 //void WDOGFeedTask(void *argument);
 
 /**
@@ -100,7 +105,7 @@ void User_Tasks_Init(void)
 
 	/* add threads, ... */
   HardwareInitTaskHandle  = osThreadNew(HardwareInitTask, NULL, &HardwareInitTask_attributes);
-  //LvHandlerTaskHandle  = osThreadNew(LvHandlerTask, NULL, &LvHandlerTask_attributes);
+  LvHandlerTaskHandle  = osThreadNew(LvHandlerTask, NULL, &LvHandlerTask_attributes);
 	//KeyTaskHandle 			 = osThreadNew(KeyTask, NULL, &KeyTask_attributes);
 	//ScrRenewTaskHandle   = osThreadNew(ScrRenewTask, NULL, &ScrRenewTask_attributes);
 	
@@ -127,7 +132,14 @@ void User_Tasks_Init(void)
   * @param  argument: Not used
   * @retval None
   */
-//void LvHandlerTask(void *argument)
+static void LvHandlerTask(void *argument)
+{
+  while(1)
+  {
+    lv_task_handler();
+    osDelay(5);
+  }
+}
 
 
 

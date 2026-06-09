@@ -259,7 +259,7 @@ uint8_t HW_MPU_Init(void)
 	#if HW_USE_IMU
 		return mpu_dmp_init();
 	#endif
-	return -1;
+	return 0;
 }
 
 
@@ -353,7 +353,7 @@ uint8_t HW_AHT21_Init(void)
 	#if HW_USE_AHT21
 		return AHT_Init();
 	#endif
-	return -1;
+	return 0;
 }
 
 /**************************************************************************/
@@ -395,7 +395,7 @@ uint8_t HW_Barometer_Init(void)
 		return SPL_init();
 	#endif
 
-	return -1;
+	return 0;
 }
 
 
@@ -418,7 +418,7 @@ uint8_t HW_Ecompass_Init(void)
 		return LSM303DLH_Init();
 	#endif
 
-	return -1;
+	return 0;
 }
 
 /**************************************************************************/
@@ -456,7 +456,7 @@ uint8_t HW_HRmeter_Init(void)
 		return EM7028_hrs_init();
 	#endif
 
-	return -1;
+	return 0;
 
 }
 

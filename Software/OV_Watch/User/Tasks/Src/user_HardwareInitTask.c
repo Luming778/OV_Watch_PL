@@ -15,15 +15,14 @@
 // bsp
 #include "key.h"
 #include "lcd.h"
-#include "lcd_init.h"
-// #include "CST816.h"      // 触摸屏，暂不开
+#include "CST816.h"      // 触摸屏，暂不开
 // #include "DataSave.h"    // EEPROM，暂不开
 
 // ui
-// #include "lvgl.h"            // LVGL，暂不开
-// #include "lv_port_disp.h"
-// #include "lv_port_indev.h"
-// #include "ui.h"
+#include "lvgl.h"            // LVGL，暂不开
+#include "lv_port_disp_template.h"
+#include "lv_port_indev_template.h"
+#include "ui.h"
 
 // APP SYS setting
 // #include "ui_DateTimeSetPage.h"
@@ -35,7 +34,19 @@
 /* Private variables ---------------------------------------------------------*/
 extern uint8_t HardInt_receive_str[25];
 /* Private function prototypes -----------------------------------------------*/
+void LED_Port_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+	/*Configure GPIO pin : PB15 */
+  GPIO_InitStruct.Pin = GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
 
 /**
   * @brief  hardwares init task
@@ -48,6 +59,8 @@ void HardwareInitTask(void *argument)
 	{
     vTaskSuspendAll();
 
+
+    LED_Port_Init(); // LED - 测试用，暂不开
     // RTC Wake - 暂不开RTC
     // if(HAL_RTCEx_SetWakeUpTimer_IT(&hrtc, 2000, RTC_WAKEUPCLOCK_RTCCLK_DIV16) != HAL_OK)
     // {
@@ -55,8 +68,8 @@ void HardwareInitTask(void *argument)
     // }
 
     // usart start
-    HAL_UART_Receive_DMA(&huart1,(uint8_t*)HardInt_receive_str,25);
-    __HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
+    // HAL_UART_Receive_DMA(&huart1,(uint8_t*)HardInt_receive_str,25);
+    // __HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
 
     // PWM Start - 背光需要
     HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
@@ -65,7 +78,7 @@ void HardwareInitTask(void *argument)
     delay_init();
 
     // power - 暂不开
-    // HWInterface.Power.Init();
+    HWInterface.Power.Init();
 
     // key
     //Key_Port_Init();
@@ -119,9 +132,9 @@ void HardwareInitTask(void *argument)
     // HWInterface.BLE.Init();
     // HWInterface.BLE.Disable();
 
-    // touch - 暂不开
-    // CST816_GPIO_Init();
-    // CST816_RESET();
+    // touch - 
+    CST816_GPIO_Init();
+    CST816_RESET();
 
     // ========== LCD 初始化和测试 ==========
     LCD_Init();
@@ -131,16 +144,17 @@ void HardwareInitTask(void *argument)
     LCD_Set_Light(80);  // 亮度80%
     LCD_ShowString(60, 120, (uint8_t*)"LCD OK!", WHITE, BLACK, 24, 0);
     LCD_ShowString(34, 160, (uint8_t*)"OV-Watch V2.4.4", WHITE, BLACK, 16, 0);
+    delay_ms(1000);
+    LCD_Fill(0, LCD_H/2-24, LCD_W, LCD_H/2+49, BLACK);
     // ======================================
 
     // LVGL - 暂不开
-    // lv_init();
-    // lv_port_disp_init();
-    // lv_port_indev_init();
-    // ui_init();
+    lv_init();
+    lv_port_disp_init();
+    lv_port_indev_init();
+    ui_init();
 
     xTaskResumeAll();
 		vTaskDelete(NULL);
-		osDelay(500);
 	}
 }

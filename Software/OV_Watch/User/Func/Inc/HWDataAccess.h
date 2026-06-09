@@ -36,7 +36,7 @@ extern "C" {
 #if HW_USE_HARDWARE
   #define HW_USE_RTC    0
   #define HW_USE_BLE    0
-  #define HW_USE_BAT    0
+  #define HW_USE_BAT    1
   #define HW_USE_LCD    1
   #define HW_USE_IMU    0
   #define HW_USE_AHT21  0
